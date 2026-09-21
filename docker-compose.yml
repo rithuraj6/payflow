@@ -1,0 +1,74 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: payflow-postgres
+    environment:
+      POSTGRES_USER: payflow
+      POSTGRES_PASSWORD: payflow_dev_password
+      POSTGRES_DB: payflow
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - payflow-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payflow -d payflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: payflow-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - payflow-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: payflow-api:1.1
+    container_name: payflow-api
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql+psycopg://payflow:payflow_dev_password@postgres:5432/payflow
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - payflow-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
+    external: true
+    name: ba7fe98ea447b92e1963c32dd8a55787964567d04bd4630cc552f67beb13e77c
+
+  redis_data:
+    external: true
+    name: 6de1633c937c79805d13b390b096253225e0098a67caec389936d7ace5657349
+
+networks:
+  payflow-network:
+    external: true
+    name: payflow-network
