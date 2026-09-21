@@ -48,5 +48,21 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh '''
+                        . .venv/bin/activate
+
+                        sonar-scanner \
+                        -Dsonar.projectKey=payflow \
+                        -Dsonar.projectName=PayFlow \
+                        -Dsonar.sources=app \
+                        -Dsonar.tests=tests \
+                        -Dsonar.python.version=3.13
+                    '''
+                }
+            }
+        }
     }
 }
