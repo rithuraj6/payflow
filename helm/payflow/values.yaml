@@ -1,0 +1,36 @@
+replicaCount: 3
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: payflow-api
+  tag: "1.1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8001
+
+containerPort: 8001
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+postgres:
+  image: postgres:16
+  port: 5432
+  database: payflow
+  username: payflow
+  password: payflow_dev_password
+  storage:
+    size: 1Gi
+
+redis:
+  image: redis:7-alpine
+  port: 6379

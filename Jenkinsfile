@@ -26,9 +26,8 @@ pipeline {
             steps {
                 sh '''
                     . .venv/bin/activate
-                    pytest
+                    DATABASE_URL=sqlite:// pytest
                 '''
             }
         }
-    }
 }

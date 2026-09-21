@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "payflow.fullname" . }}-config
+  labels:
+    {{- include "payflow.labels" . | nindent 4 }}
+
+data:
+  DATABASE_HOST: "{{ include "payflow.fullname" . }}-postgres"
+  DATABASE_PORT: "{{ .Values.postgres.port }}"
+  DATABASE_NAME: "{{ .Values.postgres.database }}"
+  DATABASE_USER: "{{ .Values.postgres.username }}"
+
+  REDIS_HOST: "{{ include "payflow.fullname" . }}-redis"
+  REDIS_PORT: "{{ .Values.redis.port }}"
