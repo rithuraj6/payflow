@@ -50,17 +50,21 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh '''
-                        . .venv/bin/activate
+                script {
+                    def scannerHome = tool 'sonar-scanner'
 
-                        sonar-scanner \
-                        -Dsonar.projectKey=payflow \
-                        -Dsonar.projectName=PayFlow \
-                        -Dsonar.sources=app \
-                        -Dsonar.tests=tests \
-                        -Dsonar.python.version=3.13
-                    '''
+                    withSonarQubeEnv('sonar-server') {
+                        sh """
+                            . .venv/bin/activate
+
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=payflow \
+                            -Dsonar.projectName=PayFlow \
+                            -Dsonar.sources=app \
+                            -Dsonar.tests=tests \
+                            -Dsonar.python.version=3.13
+                        """
+                    }
                 }
             }
         }
