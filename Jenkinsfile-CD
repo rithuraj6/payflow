@@ -16,10 +16,10 @@ pipeline {
             }
         }
 
-        stage('Show Image') {
+                stage('Show Image') {
             steps {
                 echo "Deploying image:"
-                echo "rithuraj6/payflow-api:${IMAGE_TAG}"
+                echo "rithuraj6/payflow-api:${params.IMAGE_TAG}"
             }
         }
     }
