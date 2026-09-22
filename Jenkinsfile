@@ -148,6 +148,20 @@ pipeline {
             }
         }
 
+
+        stage('Trigger CD') {
+            steps {
+                build job: 'PayFlow-CD',
+                    parameters: [
+                        string(
+                            name: 'IMAGE_TAG',
+                            value: "${BUILD_NUMBER}"
+                        )
+                    ],
+                    wait: false
+            }
+        }
+
         
 
         
