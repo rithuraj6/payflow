@@ -121,5 +121,35 @@ pipeline {
             }
         }
 
-      
+        stage('Docker Push') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'rithuraj6-dockerhub',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_PASSWORD'
+                    )
+                ]) {
+                    sh '''
+                        echo "$DOCKER_PASSWORD" | docker login \
+                            -u "$DOCKER_USERNAME" \
+                            --password-stdin
+
+                        docker tag \
+                            payflow-api:${BUILD_NUMBER} \
+                            ${DOCKER_USERNAME}/payflow-api:${BUILD_NUMBER}
+
+                        docker push \
+                            ${DOCKER_USERNAME}/payflow-api:${BUILD_NUMBER}
+
+                        docker logout
+                    '''
+                }
+            }
+        }
+
+        
+
+        
+    }
 }
