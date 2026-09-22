@@ -4,7 +4,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 image:
-  repository: payflow-api
+  repository: rithuraj6/payflow-api
   tag: "1.1"
   pullPolicy: IfNotPresent
 
