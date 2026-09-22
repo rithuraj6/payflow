@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(
+            name: 'IMAGE_TAG',
+            description: 'Docker image tag produced by PayFlow-CI'
+        )
+    }
+
+    stages {
+
+        stage('Checkout GitOps') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Show Image') {
+            steps {
+                echo "Deploying image:"
+                echo "rithuraj6/payflow-api:${IMAGE_TAG}"
+            }
+        }
+    }
+}
