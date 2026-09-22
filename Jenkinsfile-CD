@@ -23,15 +23,17 @@ pipeline {
             }
         }
 
-        stage('Update Helm Image') {
+       stage('Commit and Push GitOps') {
             steps {
                 sh '''
-                    sed -i \
-                    "s|tag: .*|tag: \\"${IMAGE_TAG}\\"|" \
-                    helm/payflow/values.yaml
+                    git config user.name "Jenkins"
+                    git config user.email "jenkins@payflow.local"
 
-                    echo "Updated Helm image:"
-                    grep -A3 '^image:' helm/payflow/values.yaml
+                    git add helm/payflow/values.yaml
+
+                    git commit -m "chore: deploy payflow image ${IMAGE_TAG}" || true
+
+                    git push origin gitops
                 '''
             }
         }
