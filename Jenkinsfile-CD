@@ -37,16 +37,20 @@ pipeline {
 
        stage('Commit and Push GitOps') {
             steps {
-                sh '''
-                    git config user.name "Jenkins"
-                    git config user.email "jenkins@payflow.local"
+                sshagent(credentials: ['github-ssh']) {
+                    sh '''
+                        git config user.name "Jenkins"
+                        git config user.email "jenkins@payflow.local"
 
-                    git add helm/payflow/values.yaml
+                        git add helm/payflow/values.yaml
 
-                    git commit -m "chore: deploy payflow image ${IMAGE_TAG}" || true
+                        git commit -m "chore: deploy payflow image ${IMAGE_TAG}" || true
 
-                    git push origin HEAD:gitops
-                '''
+                        git remote set-url origin git@github.com:rithuraj6/payflow.git
+
+                        git push origin HEAD:gitops
+                    '''
+                }
             }
         }
     }
