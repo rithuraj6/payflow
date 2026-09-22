@@ -48,7 +48,7 @@ pipeline {
 
                         git remote set-url origin git@github.com:rithuraj6/payflow.git
 
-                        git push origin HEAD:gitops
+                        GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/var/jenkins_home/.ssh/known_hosts -o StrictHostKeyChecking=yes" git push origin HEAD:gitops
                     '''
                 }
             }
