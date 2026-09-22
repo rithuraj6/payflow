@@ -15,8 +15,20 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Update Helm Image') {
+            steps {
+                sh '''
+                    sed -i \
+                    "s|tag: .*|tag: \\"${IMAGE_TAG}\\"|" \
+                    helm/payflow/values.yaml
 
-                stage('Show Image') {
+                    echo "Updated Helm image:"
+                    grep -A3 '^image:' helm/payflow/values.yaml
+                '''
+            }
+        }
+
+        stage('Show Image') {
             steps {
                 echo "Deploying image:"
                 echo "rithuraj6/payflow-api:${params.IMAGE_TAG}"
