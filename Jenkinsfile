@@ -120,5 +120,15 @@ pipeline {
                 '''
             }
         }
+
+
+        stage('Docker Build') {
+            steps {
+                sh '''
+                    docker build \
+                    -t payflow-api:${BUILD_NUMBER} .
+                '''
+            }
+        }
     }
 }
