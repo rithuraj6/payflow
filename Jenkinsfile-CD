@@ -45,7 +45,7 @@ pipeline {
 
                     git commit -m "chore: deploy payflow image ${IMAGE_TAG}" || true
 
-                    git push origin gitops
+                    git push origin HEAD:gitops
                 '''
             }
         }
