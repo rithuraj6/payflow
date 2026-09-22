@@ -75,5 +75,28 @@ pipeline {
                 }
             }
         }
+
+
+        stage('OWASP Dependency Check') {
+            steps {
+                sh '''
+                    mkdir -p reports/dependency-check
+
+                    dependency-check.sh \
+                    --project "PayFlow" \
+                    --scan requirements.txt \
+                    --scan requirements-dev.txt \
+                    --format HTML \
+                    --out reports/dependency-check
+                '''
+            }
+
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reports/dependency-check/**',
+                                    allowEmptyArchive: true
+                }
+            }
+        }
     }
 }
