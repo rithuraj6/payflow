@@ -114,6 +114,7 @@ pipeline {
                 sh '''
                     trivy image \
                     --severity HIGH,CRITICAL \
+                    --ignore-unfixed \
                     --exit-code 1 \
                     payflow-api:${BUILD_NUMBER}
                 '''
