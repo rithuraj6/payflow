@@ -5,7 +5,7 @@ fullnameOverride: ""
 
 image:
   repository: rithuraj6/payflow-api
-  tag: "32"
+  tag: "33"
   pullPolicy: IfNotPresent
 
 service:
